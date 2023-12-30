@@ -10,9 +10,10 @@ export type OffsetControlProps = {
 }>;
 
 function offsetToMs(offset: string | number) {
+  const sign = Math.sign(+offset);
   const [minutes, seconds] = String(offset).split('.');
 
-  return minutesToMs(minutes) + Number(seconds || 0);
+  return (minutesToMs(minutes) + Number(seconds || 0)) * sign;
 }
 
 export function OffsetControl({ initialOffset = 0, onApplyOffsetClick }: OffsetControlProps) {
@@ -31,7 +32,7 @@ export function OffsetControl({ initialOffset = 0, onApplyOffsetClick }: OffsetC
 
   const getInputDefaultValue = () => {
     const { current } = offsetRef;
-    return current > 0 ? current : undefined;
+    return current !== 0 ? current : undefined;
   };
 
   return (
